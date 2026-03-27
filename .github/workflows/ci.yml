@@ -1,0 +1,22 @@
+# ---------------------------------------------------------
+#                   By Matvei Sorokvahsin
+# ---------------------------------------------------------
+
+name: DockerImageCI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag deb_inst:$(date +%s)
+    - name: Run builded container
+      run: docker run -d deb_inst

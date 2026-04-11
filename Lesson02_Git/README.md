@@ -37,3 +37,8 @@
 9. Вернемся к началу через git reset --hard HEAD~6 либо через удаление директории с локальным репозиторием и последующим созданием нового.
 
 <img width="493" height="139" alt="step9_back_to_begin" src="https://github.com/user-attachments/assets/19010996-672f-404f-8827-c22a1514e204" />
+
+## Вывод команды git log --graph --all
+<img width="1919" height="1030" alt="git log --graph --all" src="https://github.com/user-attachments/assets/aed3ed3f-3f74-41d0-b0fa-4f3f3b56a100" />
+<img width="1909" height="328" alt="git log --graph --all2" src="https://github.com/user-attachments/assets/558649f7-d893-411d-b444-b6dc88d105ad" />
+

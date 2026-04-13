@@ -1,0 +1,11 @@
+[Unit]
+Description=System Info Service
+After=network.target
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/sysinfo.sh
+Restart=always
+StandardOutput=append:/var/log/sysinfo.log
+StandardError=append:/var/log/sysinfo.log
+[Install]
+WantedBy=multi-user.target

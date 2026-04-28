@@ -1,58 +1,47 @@
 #!/bin/bash
 
+echo "Установка зависимостей для MongoDB"
+sudo apt update
+sudo apt install dirmngr gnupg apt-transport-https ca-certificates curl -y
 
-echo -e "\033[34mУстановка зависимостей для mongodb \033[0m"
+curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | sudo gpg --dearmor -o /usr/share/keyrings/mongodb-server-8.0.gpg
 
-sudo apt-get install dirmngr gnupg apt-transport-https ca-certificates curl -y
+echo "deb [ signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] http://repo.mongodb.org/apt/debian bookworm/mongodb-org/8.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
 
-dpkg -s dirmngr gnupg apt-transport-https ca-certificates curl
-
-if [ $? -ne 0 ];
-
-then
-        echo "Установка прошла неудачно"
-	exit 1
-else
-        echo "Установка завершилась"
-fi
-
-curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
-   sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg \
-   --dearmor
-
-if [ -s "/usr/share/keyrings/mongodb-server-8.0.gpg" ];
-then
-	echo "GPG ключ добавлен"
-else
-	exit 1
-fi
-
-echo "deb [ signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] http://repo.mongodb.org/apt/debian bookworm/mongodb-org/8.0 main" | \
-   sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
-
-if [ -s "/etc/apt/sources.list.d/mongodb-org-8.0.list" ];
-then
-	echo "Репозиторий установлен"
-else
-	exit 1
-fi
-
-sudo apt update -y
-
+sudo apt update
 sudo apt install mongodb-org -y
 
-dpkg -s mongodb-org
+sudo systemctl start mongod
+sudo systemctl enable mongod
 
-if [ $? -ne 0 ];
-
+if ! systemctl is-active --quiet mongod
 then
-	echo "Установка прошла неудачно"
-else
-	echo "Установка завершилась"
+	echo "MongoDB не запустилась"
+	exit 1
 fi
 
-echo "Установим mongodb compass"
+mongosh --quiet --eval '
+use data
+db.createCollection("data")
+db.createRole({
+	role: "managerRole",
+	privileges: [
+		{
+			resource: { db: "data", collection: "data" },
+			actions: [ "find" ]
+		}
+	],
+	roles: []
+})
+db.createUser({
+	user: "manager",
+	pwd: "manager123",
+	roles: [
+		{ role: "managerRole", db: "data" }
+	]
+})
+'
 
-wget https://downloads.mongodb.com/compass/mongodb-compass_1.32.3_amd64.deb
-sudo apt install ./mongodb-compass_1.32.3_amd64.deb -y
+echo "MongoDB установлена"
+echo "База data и пользователь manager созданы"
 

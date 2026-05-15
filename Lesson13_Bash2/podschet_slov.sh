@@ -11,8 +11,9 @@ fi
 for files in *.log
 
 do
-
-	cp $files $files'_'$date.log
+	name="${files%.*}"
+        ext="${files##*.}"
+        cp "$files" "${name}_${date}.${ext}"
 
 done
 
@@ -21,6 +22,7 @@ SHORT_HASH=$(git rev-parse --short HEAD)
 for files1 in *.py
 
 do
-
-	cp $files1 $files1'_'$SHORT_HASH
+	name="${files1%.*}"
+        ext="${files1##*.}"
+        cp "$files1" "${name}_${SHORT_HASH}.${ext}"
 done

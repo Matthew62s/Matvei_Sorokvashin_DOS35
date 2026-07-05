@@ -7,4 +7,5 @@
 ## 2. Сайт с динамичным контентом, создан docker-compose для управления образами, в нем запускается DB - postgres вместе с начальнеой съемой - init.sql, дальше билдится Dockerfile - php-fpm для работы с DB прокидывается бекенд файл сайта news.php, после запускается web-server nginx прокидывается конфиг и файлы сайта, index.html, app.js.
 ### Запуск:
 ### docker compose up --build -d
-<img width="1917" height="762" alt="Сайт2" src="https://github.com/user-attachments/assets/7dd70ee5-c0ef-4742-a164-0396db3c26a5" />
+<img width="1912" height="810" alt="Сайт2" src="https://github.com/user-attachments/assets/308e5f60-38de-4e90-8e96-0772ad1d5249" />
+

@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  php-fpm1:
+    build: .
+    container_name: php_prod
+    volumes:
+      - .:/app:ro
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
+  webserver:
+    container_name: nginx_prod
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - .:/app:rw
+    depends_on:
+      - php-fpm1
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres_db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: hello_world@3
+      POSTGRES_DB: postgres
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - postgres_data:/var/lib/postgresql/data:rw
+
+volumes:
+  postgres_data:

@@ -92,3 +92,37 @@ Jenkins доступен.
 
 ## Создадим simple pipeline
 
+pipeline {
+    agent any
+
+    stages {
+        stage('Deploy') {
+            steps {
+                sshagent(credentials: ['ssh_private']) {
+                    sh """
+                        ssh -T -o StrictHostKeyChecking=no -p 8392 root@62.181.53.80 '
+                        set -e
+
+                        cd /opt/jenkins_workdir
+
+                        if [ ! -d Matvei_Sorokvashin_DOS35 ]; then
+                            git clone --filter=blob:none --no-checkout \
+                                git@github.com:Matthew62s/Matvei_Sorokvashin_DOS35.git
+                        fi
+
+                        cd Matvei_Sorokvashin_DOS35
+
+                        git sparse-checkout init --cone
+                        git sparse-checkout set Lesson24_Docker_HW24/Dynamic_service
+                        git checkout
+                        git pull
+
+                        cd Lesson24_Docker_HW24/Dynamic_service
+                        docker compose up --build -d
+                        '
+                    """
+                }
+            }
+        }
+    }
+}

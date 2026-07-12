@@ -91,7 +91,7 @@ Jenkins доступен.
 <img width="1919" height="991" alt="Screenshot_3" src="https://github.com/user-attachments/assets/af4a2b84-dc4a-4446-9a82-fd1c34886690" />
 
 ## Создадим simple pipeline
-
+```groovy
 pipeline {
     agent any
     stages {
@@ -120,7 +120,7 @@ pipeline {
         }
     }
 }
-
+```
 ## Результат выполнения pipeline
 <img width="1918" height="812" alt="Screenshot_2" src="https://github.com/user-attachments/assets/b15dd8c7-e9da-4829-a305-704f676b1e99" />
 <img width="1919" height="228" alt="1" src="https://github.com/user-attachments/assets/f6bc2fb4-3892-459e-9abd-fef7a4d54a6e" />

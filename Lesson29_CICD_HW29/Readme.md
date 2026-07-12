@@ -49,3 +49,46 @@ Travis CI также является облачным сервисом непр
 <img width="1536" height="1024" alt="CI" src="https://github.com/user-attachments/assets/6c346d17-f67a-4e96-9fb5-970dfef934e4" />
 
 По результатам сравнения можно сделать вывод, что наиболее универсальным решением является Jenkins. Благодаря открытому исходному коду, большому количеству плагинов и высокой гибкости настройки он подходит для проектов различного масштаба и поэтому был выбран для выполнения практической части работы.
+
+
+## Установим jenkins
+
+Создадим такой Dockerfile
+
+FROM jenkins/jenkins:2.568.1-jdk21
+USER root
+RUN apt-get update && apt-get install -y lsb-release ca-certificates curl && \
+    install -m 0755 -d /etc/apt/keyrings && \
+    curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
+    chmod a+r /etc/apt/keyrings/docker.asc && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
+    https://download.docker.com/linux/debian $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" \
+    | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+    apt-get update && apt-get install -y docker-ce-cli && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+USER jenkins
+RUN jenkins-plugin-cli --plugins "blueocean docker-workflow json-path-api"
+
+## Сбилдим и запустим его.
+
+docker run \
+  --name jenkins-blueocean \
+  --restart=on-failure \
+  --detach \
+  --network jenkins \
+  --env DOCKER_HOST=tcp://docker:2376 \
+  --env DOCKER_CERT_PATH=/certs/client \
+  --env DOCKER_TLS_VERIFY=1 \
+  --publish 8080:8080 \
+  --publish 50000:50000 \
+  --volume jenkins-data:/var/jenkins_home \
+  --volume jenkins-docker-certs:/certs/client:ro \
+  myjenkins-blueocean:2.568.1-1
+
+Jenkins доступен.
+
+<img width="1268" height="989" alt="Screenshot_1" src="https://github.com/user-attachments/assets/a3e782e9-02f5-4598-b3aa-b3b1aefe83d7" />
+<img width="1919" height="991" alt="Screenshot_3" src="https://github.com/user-attachments/assets/af4a2b84-dc4a-4446-9a82-fd1c34886690" />
+
+## Создадим simple pipeline
+

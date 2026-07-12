@@ -94,7 +94,6 @@ Jenkins доступен.
 
 pipeline {
     agent any
-
     stages {
         stage('Deploy') {
             steps {
@@ -102,21 +101,16 @@ pipeline {
                     sh """
                         ssh -T -o StrictHostKeyChecking=no -p 8392 root@62.181.53.80 '
                         set -e
-
                         cd /opt/jenkins_workdir
-
                         if [ ! -d Matvei_Sorokvashin_DOS35 ]; then
                             git clone --filter=blob:none --no-checkout \
                                 git@github.com:Matthew62s/Matvei_Sorokvashin_DOS35.git
                         fi
-
                         cd Matvei_Sorokvashin_DOS35
-
                         git sparse-checkout init --cone
                         git sparse-checkout set Lesson24_Docker_HW24/Dynamic_service
                         git checkout
                         git pull
-
                         cd Lesson24_Docker_HW24/Dynamic_service
                         docker compose up --build -d
                         '
@@ -126,3 +120,8 @@ pipeline {
         }
     }
 }
+
+## Результат выполнения pipeline
+<img width="1918" height="812" alt="Screenshot_2" src="https://github.com/user-attachments/assets/b15dd8c7-e9da-4829-a305-704f676b1e99" />
+<img width="1919" height="228" alt="1" src="https://github.com/user-attachments/assets/f6bc2fb4-3892-459e-9abd-fef7a4d54a6e" />
+<img width="1919" height="681" alt="Screenshot_1" src="https://github.com/user-attachments/assets/87b9ca51-4242-4811-a3ff-5042745a8659" />

@@ -5,7 +5,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "AWS_machine" {
-	ami           = "data.aws_ami.ubuntu.id"
+	ami           = "ami-0734cbe7f841a2e9b"
 	instance_type = var.instance_type
 	tags = { 
 		Name = "My AWS server"

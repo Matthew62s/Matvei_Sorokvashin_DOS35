@@ -1,0 +1,6 @@
+./Lesson39_Terraform/.terraform
+.terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl

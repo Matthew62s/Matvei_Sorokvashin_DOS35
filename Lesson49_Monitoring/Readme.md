@@ -1,4 +1,5 @@
 Установим prometheus с помощью docker
+## В качестве exporter возьмем node exporter под сбор системных и архитектурных метрик lunux
 ```
 Создадим папки 
 mkdir -p /opt/prometheus /opt/prometheus/prometheus_data
@@ -50,6 +51,9 @@ volumes:
   prometheus_data:
 
 ```
-
-
+## Перейдем по http://public-ip:990
+<img width="1909" height="893" alt="Health" src="https://github.com/user-attachments/assets/9a8375ec-aa2d-4ec7-9dad-bd1be0edfb47" />
+## Попробуем получить любую тестовую метрику
+<img width="1909" height="900" alt="PromQL" src="https://github.com/user-attachments/assets/967eb05a-7059-421d-8605-c9082fc979c2" />
+## Запрос выполнен успешно
 
